@@ -62,9 +62,10 @@ func (me *Worm) Wriggle(j chan *Job) {
 }
 
 func (me *Worm) Retire(immediate bool) {
-	me.quit = make(chan bool)
 	me.busy = false
 	if immediate {
 		me.retired = true
+	} else {
+		me.quit = make(chan bool)
 	}
 }
