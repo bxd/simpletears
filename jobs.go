@@ -35,6 +35,11 @@ func (me *Job) UrlString(u_str string) *Job {
 	return me
 }
 
+func (me *Job) SetID(s string) *Job {
+	me.id = s
+	return me
+}
+
 func (me *Job) SetMethod(m string) *Job {
 	switch strings.ToUpper(m) {
 	case "GET":
@@ -89,56 +94,6 @@ func (me *Job) Exec() {
 		return
 	}
 }
-
-/*
-type Jobs struct {
-	head *Job
-	tail *Job
-	l    sync.Mutex
-}
-
-//push a job into the queue
-func (me *Jobs) Push(j *Job) {
-	if j == nil {
-		return
-	}
-	me.l.Lock()
-	defer me.l.Unlock()
-	if me.tail == nil {
-		me.head = j
-		me.tail = j
-		return
-	}
-	me.tail.next = j
-	me.tail = j
-}
-
-//pop a job from the queue
-func (me *Jobs) Pop() *Job {
-	if me.head == nil {
-		return nil
-	}
-	me.l.Lock()
-	defer me.l.Unlock()
-	ret := me.head
-	me.head = me.head.next
-	if me.head == nil {
-		me.tail = nil
-	}
-	ret.next = nil
-	return ret
-}
-
-//if the jobs queue is empty
-func (me *Jobs) IsEmpty() bool {
-	me.l.Lock()
-	defer me.l.Unlock()
-	if me.head == nil {
-		return true
-	}
-	return false
-}
-*/
 
 type Jobs struct {
 	job_buf chan *Job
