@@ -40,7 +40,9 @@ func (me *Worm) Wriggle(j chan *Job) {
 			}
 			select {
 			case job := <-j:
-				job.Exec()
+				if job != nil {
+					job.Exec()
+				}
 				// case <-me.quit:
 				// 	close(me.quit)
 				// 	me.quit = nil

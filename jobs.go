@@ -40,6 +40,11 @@ func (me *Job) SetID(s string) *Job {
 	return me
 }
 
+func (me *Job) SetBody(b io.Reader) *Job {
+	me.body = b
+	return me
+}
+
 func (me *Job) SetMethod(m string) *Job {
 	switch strings.ToUpper(m) {
 	case "GET":
@@ -67,7 +72,9 @@ func (me *Job) Exec() {
 	)
 	if e != nil {
 		log.Println(e)
-		me.setting.call_back(me.id, e, nil)
+		if me.setting.call_back != nil {
+			me.setting.call_back(me.id, e, nil)
+		}
 		return
 	}
 	for k, v := range me.setting.header {
@@ -80,7 +87,9 @@ func (me *Job) Exec() {
 	resp, e := client.Do(req)
 	if e != nil {
 		log.Println(e)
-		me.setting.call_back(me.id, e, nil)
+		if me.setting.call_back != nil {
+			me.setting.call_back(me.id, e, nil)
+		}
 		return
 	}
 	defer resp.Body.Close()
@@ -88,9 +97,12 @@ func (me *Job) Exec() {
 		if me.setting.call_back != nil {
 			me.setting.call_back(me.id, nil, b)
 		}
+		return
 	} else {
 		log.Println(e)
-		me.setting.call_back(me.id, e, nil)
+		if me.setting.call_back != nil {
+			me.setting.call_back(me.id, e, nil)
+		}
 		return
 	}
 }
